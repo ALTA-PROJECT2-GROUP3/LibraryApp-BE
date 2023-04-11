@@ -1,6 +1,7 @@
 package data
 
 import (
+	"errors"
 	"libraryapp/features/users"
 
 	"gorm.io/gorm"
@@ -14,6 +15,19 @@ func New(db *gorm.DB) users.UserData {
 	return &userQuery{
 		db: db,
 	}
+}
+
+// Login implements users.UserData
+func (uq *userQuery) Login(username string) (users.Core, error) {
+	tmp := User{}
+	tx := uq.db.Where("username = ?", username).First(&tmp)
+	if tx.RowsAffected < 1 {
+		return users.Core{}, errors.New("username not found")
+	}
+	if tx.Error != nil {
+		return users.Core{}, tx.Error
+	}
+	return UserToCore(tmp), nil
 }
 
 // Register implements users.UserData
