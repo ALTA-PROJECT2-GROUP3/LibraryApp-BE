@@ -2,7 +2,8 @@ package database
 
 import (
 	"libraryapp/app/config"
-	// users "libraryapp/features/users/data"
+	users "libraryapp/features/users/data"
+
 	// books "libraryapp/features/books/data"
 	"fmt"
 	"log"
@@ -29,7 +30,7 @@ func InitDBMySql(cfg config.AppConfig) *gorm.DB {
 	return db
 }
 
-// func InitialMigration(db *gorm.DB) {
-// 	db.AutoMigrate(&users.User{})
-// 	db.AutoMigrate(&books.Book{})
-// }
+func InitialMigration(db *gorm.DB) {
+	db.AutoMigrate(&users.User{})
+	// db.AutoMigrate(&books.Book{})
+}

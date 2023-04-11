@@ -1,10 +1,10 @@
 package handler
 
 type RegisterRequest struct {
-	Name     string
-	Username string
-	Email    string
-	Password string
-	Address  string
-	Phone    string
+	Name     string `json:"name" form:"name"`
+	Username string `json:"user_name" form:"user_name"`
+	Email    string `json:"email" form:"email"`
+	Password string `json:"password" form:"password"`
+	Address  string `json:"address" form:"address"`
+	Phone    string `json:"phone" form:"phone"`
 }
