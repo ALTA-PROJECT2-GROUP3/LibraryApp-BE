@@ -1,6 +1,8 @@
 package data
 
 import (
+	modelBook "libraryapp/features/books/data"
+
 	"libraryapp/features/users"
 
 	"gorm.io/gorm"
@@ -15,6 +17,7 @@ type User struct {
 	Address  string
 	Phone    string
 	Pictures string
+	Books    []modelBook.Book
 }
 
 func CoreToUser(data users.Core) User {
