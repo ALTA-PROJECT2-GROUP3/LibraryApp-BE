@@ -3,6 +3,7 @@ package services
 import (
 	"libraryapp/features/users"
 	"libraryapp/helper"
+	"libraryapp/middlewares"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -17,6 +18,24 @@ func New(repo users.UserData) users.UserService {
 		data: repo,
 		vld:  validator.New(),
 	}
+}
+
+// Login implements users.UserService
+func (us *userService) Login(username string, password string) (string, users.Core, error) {
+	tmp, err := us.data.Login(username)
+	if err != nil {
+		return "", users.Core{}, err
+	}
+	// Compare password
+	if err := helper.PassCompare(tmp.Password, password); err != nil {
+		return "", users.Core{}, err
+	}
+	// Generate token
+	token, err := middlewares.CreateToken(tmp.Id)
+	if err != nil {
+		return "", users.Core{}, err
+	}
+	return token, tmp, nil
 }
 
 // Register implements users.UserService
