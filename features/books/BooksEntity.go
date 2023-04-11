@@ -10,3 +10,11 @@ type Core struct {
 	UserID      uint
 	UserName    string
 }
+
+type BookService interface {
+	Add(newBook Core) error
+}
+
+type BookData interface {
+	Insert(input Core) error
+}
