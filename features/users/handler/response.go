@@ -6,7 +6,7 @@ type LoginResponse struct {
 }
 
 type UpdateResponse struct {
-	Pictures string `json:"pictures" form:"pictures"`
+	// Pictures string `json:"pictures" form:"pictures"`
 	Name     string `json:"name" form:"name"`
 	Username string `json:"user_name" form:"user_name"`
 	Email    string `json:"email" form:"email"`
