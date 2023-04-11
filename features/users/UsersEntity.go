@@ -1,7 +1,5 @@
 package users
 
-import "mime/multipart"
-
 type Core struct {
 	Id       uint
 	Name     string `validate:"required"`
@@ -14,7 +12,7 @@ type Core struct {
 }
 
 type UserService interface {
-	Register(newUser Core, file *multipart.FileHeader) error
+	Register(newUser Core) error
 }
 
 type UserData interface {

@@ -2,7 +2,7 @@ package services
 
 import (
 	"libraryapp/features/users"
-	"mime/multipart"
+	"libraryapp/helper"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -20,6 +20,21 @@ func New(repo users.UserData) users.UserService {
 }
 
 // Register implements users.UserService
-func (*userService) Register(newUser users.Core, file *multipart.FileHeader) error {
-	panic("unimplemented")
+func (us *userService) Register(newUser users.Core) error {
+	// Check input validation
+	errVld := us.vld.Struct(newUser)
+	if errVld != nil {
+		return errVld
+	}
+	// Bcrypt password before insert into database
+	passBcrypt, errBcrypt := helper.PassBcrypt(newUser.Password)
+	if errBcrypt != nil {
+		return errBcrypt
+	}
+	newUser.Password = passBcrypt
+	err := us.data.Register(newUser)
+	if err != nil {
+		return err
+	}
+	return nil
 }
