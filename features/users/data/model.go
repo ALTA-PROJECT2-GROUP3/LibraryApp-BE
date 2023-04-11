@@ -42,29 +42,3 @@ func UserToCore(data User) users.Core {
 		Pictures: data.Pictures,
 	}
 }
-
-func CoreToUpdate (update users.Core) User {
-	return User{
-		Model:    gorm.Model{ID: update.Id},
-		Name:     update.Name,
-		Username: update.Username,
-		Email:    update.Email,
-		Password: update.Password,
-		Address:  update.Address,
-		Phone:    update.Phone,
-		Pictures: update.Pictures,
-	}
-}
-
-func UpdateToCore(update User) users.Core {
-	return users.Core{
-		Id:       update.ID,
-		Name:     update.Name,
-		Username: update.Username,
-		Email:    update.Email,
-		Password: update.Password,
-		Address:  update.Address,
-		Phone:    update.Phone,
-		Pictures: update.Pictures,
-	}
-}

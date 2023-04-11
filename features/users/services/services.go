@@ -60,10 +60,10 @@ func (us *userService) Register(newUser users.Core) error {
 
 func (us *userService) Update(userID int, updatedUser users.Core) error {
 	// Check input validation
-	// errVld := us.vld.Struct(updatedUser)
-	// if errVld != nil {
-	// 	return errVld
-	// }
+	errVld := us.vld.Struct(updatedUser)
+	if errVld != nil {
+		return errVld
+	}
 	// Bcrypt password before updating into database
 	if updatedUser.Password != "" {
 		passBcrypt, errBcrypt := helper.PassBcrypt(updatedUser.Password)
@@ -72,7 +72,7 @@ func (us *userService) Update(userID int, updatedUser users.Core) error {
 		}
 		updatedUser.Password = passBcrypt
 	}
-	err := us.Update(userID, updatedUser)
+	err := us.data.Update(userID, updatedUser)
 	if err != nil {
 		return err
 	}
