@@ -1,0 +1,670 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/ADIYUDAPRANATA/LibraryApp/1.0.0
+info:
+  description: This is a simple API
+  version: "1.0.0"
+  title: Library App Project
+  contact:
+    email: adiyudapranata@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: Auth
+  - name: User
+  - name: Book
+  - name: Borrowing
+  
+
+paths:
+  /register:
+    post:
+      tags:
+        - "Auth"
+      description: register feature for new users
+      summary: register feature for new users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                username:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                phone:
+                  type: string
+                address:
+                  type: string
+                password:
+                  type: string
+                  format: password
+            example:
+              name: "Adi Yuda Pranata"
+              username: "@Adiyuda"
+              email: "adiyudapranata@gmail.com"
+              phone: "0813456"
+              address: "Malang Jawa Timur"
+              password: "123"
+      responses:
+        201:
+          description: "insert user data"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/responseObject"
+              example:
+                message: "success create account"
+        400:
+          $ref: "#/components/responses/400"
+        500:
+          $ref: "#/components/responses/500"
+  /login:
+    post:
+      tags:
+        - "Auth"
+      description: login feature for users
+      summary: login feature for users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  format: username
+                password:
+                  type: string
+                  format: password
+            example:
+              username: "@Adiyuda"
+              password: "123"
+      responses:
+        200:
+          description: "login success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/responseObject"
+              example:
+                data:
+                  id: 1
+                  name: "Adi Yuda Pranata"
+                  token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJ1c2VySUQiOjR9.QTZxERh4CwC_UnL_eJvTi_A_qdLeBZ-IjR4nqoxjodk"
+                message: "login success"
+        400:
+          $ref: "#/components/responses/400"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
+          
+  /users:
+    get:
+      tags:
+        - "User"
+      description: get my profile
+      summary: get my profile
+      security:
+        - JWTAuth: []
+      responses:
+        200:
+          description: success show user profile
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  id: 1
+                  name: "Adi Yuda Pranata"
+                  username: "@Adiyuda"
+                  email: "adiyudapranata@gmail.com"
+                  address: "Malang Jawa Timur"
+                  phone: "0813456"
+                  photo: "https://kurabsent.s3.amazonaws.com/2022-07-06%2006%3A40%3A47.jpg"
+                message: "success show profile"
+        400:
+          $ref: "#/components/responses/400"
+        500:
+          $ref: "#/components/responses/500"
+    put:
+      tags:
+        - "User"
+      description: edit my profile
+      summary: edit my profile
+      security:
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                photo:
+                  type: string
+                  format: binary
+                name:
+                  type: string
+                username:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                phone:
+                  type: string
+                address:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: success update user profile
+          content:
+            application/json:
+              schema:
+                 $ref: "#/components/schemas/responseObject"
+              example:
+                data:
+                  pictures: "pictures.jpg"
+                  name: "Adi Yuda Pranata"
+                  username: "@Adiyuda"
+                  email: "adiyudapranata@gmail.com"
+                  phone: "0813456"
+                  address: "Malang Jawa Timur"
+                  password: "123"
+                message: "success update user profile"
+        400:
+          $ref: "#/components/responses/400"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
+    delete:
+      tags:
+        - "User"
+      description: deactivate user
+      summary: deactivate user
+      security:
+        - JWTAuth: []
+      responses:
+        204:
+          $ref: "#/components/responses/204"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
+
+  ####################################
+  #  BOOKS
+  ####################################
+
+  /books:
+    get:
+      tags:
+        - Book
+      summary: List all Book
+      responses:
+        200:
+          description: "get all book"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/responseObject"
+              example:
+                data:
+                  [
+                    {
+                      id: 1,
+                      "title": "Naruto",
+                      "user_name": "iqbal",
+                      "stats": "Available",
+                      "book_picture": "https://kurabsent.s3.amazonaws.com/2022-07-06%2006%3A40%3A47.jpg",
+                    },
+                    {
+                      id: 2,
+                      "title": "Sasuke",
+                      "user_name": "wanta",
+                      "stats": "Not Available",
+                      "book_picture": "https://kurabsent.s3.amazonaws.com/2022-07-06%2006%3A40%3A47.jpg",
+                    },
+                    {
+                    id: 3,
+                      "title": "Hinata",
+                      "user_name": "adiyuda",
+                      "stats": "Not Available",
+                      "book_picture": "https://kurabsent.s3.amazonaws.com/2022-07-06%2006%3A40%3A47.jpg",
+                    },
+                  ]
+                message: "success show all book"
+        400:
+          $ref: "#/components/responses/400"
+        500:
+          $ref: "#/components/responses/500"
+    post:
+      tags:
+        - Book
+      summary: Create a new book
+      security:
+        - JWTAuth: []
+      requestBody:
+        description: The book to create
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Book title
+                publisher:
+                  type: string
+                  description: Publisher of the Book
+                year:
+                  type: integer
+                  description: Book publication year
+                description:
+                  type: string
+                  description: Book description
+                book_picture:
+                  type: string
+                  format: binary
+            example:
+              user_name: "iqbal"
+              title: "Naruto"
+              publisher: "Bukan saya"
+              year: 2013
+              description: "string"
+              book_picture: "pictures1.jpg"
+      responses:
+        201:
+          description: "success insert data"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "success post a book"
+        400:
+          $ref: "#/components/responses/400"
+        500:
+          $ref: "#/components/responses/500"
+
+  /books/{book_id}:
+    parameters:
+      - in: path
+        name: book_id
+        required: true
+        description: The ID of the book to retrieve or update
+        schema:
+          type: integer
+    get:
+      tags:
+        - Book
+      summary: Get a book by ID
+      responses:
+        200:
+          description: "get book details"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/responseObject"
+              example:
+                data:
+                  id: 1
+                  "user_name": "iqbal"
+                  "title": "Naruto"
+                  "publisher": "Bukan saya"
+                  "year": 2013
+                  "description": "string"
+                  "book_picture": "https://kurabsent.s3.amazonaws.com/2022-07-06%2006%3A40%3A47.jpg"
+                message: "success get book details"
+        400:
+          $ref: "#/components/responses/400"
+        500:
+          $ref: "#/components/responses/500"
+    put:
+      tags:
+        - Book
+      summary: Update a book by ID
+      security:
+        - JWTAuth: []
+      requestBody:
+        description: The updated book
+        required: false
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Book title
+                publisher:
+                  type: string
+                  description: Publisher of the Book
+                year:
+                  type: integer
+                  description: Book publication year
+                description:
+                  type: string
+                  description: Book description
+                book_picture:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: success update book
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/responseObject"
+              example:
+                data:
+                  id: 1
+                  "user_name": "iqbal"
+                  "title": "Naruto"
+                  "publisher": "Bukan saya"
+                  "year": 2013
+                  "description": "string"
+                  "book_picture": "pictures2.jpg"
+                message: "success update book"
+        400:
+          $ref: "#/components/responses/400"
+        404:
+          description: data not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: "data not found"
+        500:
+          $ref: "#/components/responses/500"
+    delete:
+      tags:
+        - Book
+      description: delete book by boook id
+      summary: delete book by book id
+      security:
+        - JWTAuth: []
+      responses:
+        200:
+          description: success delete book
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "success delete book"
+        400:
+          $ref: "#/components/responses/400"
+        404:
+          description: data not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: "data not found"
+        500:
+          $ref: "#/components/responses/500"
+  /users/books:
+    get:
+      tags:
+        - Book
+      summary: get all book from user
+      description: get all book from user
+      security:
+        - JWTAuth: []
+      responses:
+        200:
+          description: success get all book from user
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  [
+                    {
+                      "id": 1,
+                      "title": "Naruto",
+                      "publisher": "Bukan saya",
+                      "year": 2013,
+                      "description": "string",
+                      "book_picture": "https://kurabsent.s3.amazonaws.com/2022-07-06%2006%3A40%3A47.jpg",
+                    },
+                    {
+                      "id": 4,
+                      "title": "Kurama",
+                      "publisher": "Bukan saya",
+                      "year": 2015,
+                      "description": "string",
+                      "book_picture": "https://kurabsent.s3.amazonaws.com/2022-07-06%2006%3A40%3A47.jpg",
+                    },
+                  ]
+                message: "success get all user book"
+        400:
+          $ref: "#/components/responses/400"
+        500:
+          $ref: "#/components/responses/500"
+
+  ####################################
+  #  BORROWINGS
+  ####################################      
+
+  /rent:
+    post:
+      tags:
+        - Borrowing
+      summary: "Create borrowing"
+      description: "Insert data for borrowing"
+      security:
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                book_id:
+                  type: integer
+                start_date:
+                  type: string
+                end_date:
+                  type: string
+            example:
+              book_id: 1
+              start_date: "2023-04-13"
+              end_date: "2023-04-17"
+      responses:
+        201:
+          description: "success book borrowing"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/responseObject"
+              example:
+                data:
+                  book_id: 1
+                  start_date: "2023-04-13"
+                  end_date: "2023-04-17"
+                message: "success book borrowing"
+        400:
+          $ref: "#/components/responses/400"
+        500:
+          $ref: "#/components/responses/500"
+    get:
+      tags:
+        - Borrowing
+      summary: "Get all data borrowing from user"
+      description: "get all your data borrowing"
+      security:
+        - JWTAuth: []
+      responses:
+        200:
+          description: "success get user borrowing"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/responseObject"
+              example:
+                data:
+                  - book_id: 1
+                    title: "Naruto"
+                    start_date: "2023-04-15"
+                    end_date: "2023-04-17"
+                  - book_id: 1
+                    title: "Sasuke"
+                    start_date: "2023-01-15"
+                    end_date: "2023-01-17"
+                message: "sucess get user borrowing"
+        400:
+          $ref: "#/components/responses/400"
+        500:
+          $ref: "#/components/responses/500"
+    
+
+####################################
+#  COMPONENT
+####################################
+components:
+  securitySchemes:
+    JWTAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    responseObject:
+      type: object
+      properties:
+        data:
+          type: object
+        message:
+          type: string
+
+    Borrowing:
+      type: object
+      required:
+        - book_id
+        - start_date
+        - end_date
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The ID of the borrowing
+        book_id:
+          type: integer
+          format: int64
+          description: The ID of the Book
+        start_date:
+          type: string
+          format: date
+          description: Start date
+        end_date:
+          type: string
+          format: date
+          description: End date
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time the team was created
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time the team was last updated
+        deleted_at:
+          type: string
+          format: date-time
+          description: The date and time the team was deleted
+ 
+  responses:
+    204:
+      description: Delete data success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+          example:
+            message: "Delete data success"
+           
+
+    400:
+      description: "error from user"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+          example:
+            message: "bad request"
+    401:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: boolean
+              message:
+                type: string
+          example:
+            status: false
+            message: "request does not contain a valid token"
+    404:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: boolean
+              message:
+                type: string
+          example:
+            message: "data not found"
+
+    500:
+      description: "error from server"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+          example:
+            message: "internal server error"
