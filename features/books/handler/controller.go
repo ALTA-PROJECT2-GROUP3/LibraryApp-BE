@@ -5,6 +5,7 @@ import (
 	"libraryapp/helper"
 	"libraryapp/middlewares"
 	"net/http"
+	"strconv"
 
 	"github.com/jinzhu/copier"
 	"github.com/labstack/echo/v4"
@@ -35,4 +36,25 @@ func (bk *BookHandler) Add(c echo.Context) error {
 		return c.JSON(helper.ErrorResponse(err))
 	}
 	return c.JSON(helper.SuccessResponse(http.StatusCreated, "add book successfully"))
+}
+
+func (bk *BookHandler) GetAll(c echo.Context) error {
+	var pageNumber int = 1
+	pageParam := c.QueryParam("page")
+	if pageParam != "" {
+		pageConv, errConv := strconv.Atoi(pageParam)
+		if errConv != nil {
+			return c.JSON(http.StatusInternalServerError, helper.Response("Failed, page must number"))
+		} else {
+			pageNumber = pageConv
+		}
+	}
+
+	nameParam := c.QueryParam("name")
+	data, err := bk.srv.GetAll(pageNumber, nameParam)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.Response("Failed, error read data"))
+	}
+	dataResponse := CoreToGetAllBookResp(data)
+	return c.JSON(http.StatusOK, helper.ResponseWithData("Success", dataResponse))
 }
