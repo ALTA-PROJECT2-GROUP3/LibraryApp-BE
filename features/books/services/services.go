@@ -18,6 +18,14 @@ func New(repo books.BookData) books.BookService {
 	}
 }
 
+// GetAll implements books.BookService
+func (srv *bookService) GetAll(page int, name string) ([]books.Core, error) {
+	limit := 10
+	offset := (page - 1) * limit
+	data, err := srv.data.SelectAll(limit, offset, name)
+	return data, err
+}
+
 // Add implements books.BookService
 func (srv *bookService) Add(newBook books.Core) error {
 	errValidate := srv.vld.Struct(newBook)

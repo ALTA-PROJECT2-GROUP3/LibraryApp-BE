@@ -13,8 +13,10 @@ type Core struct {
 
 type BookService interface {
 	Add(newBook Core) error
+	GetAll(page int, name string) ([]Core, error)
 }
 
 type BookData interface {
 	Insert(input Core) error
+	SelectAll(limit, offset int, name string) ([]Core, error)
 }
