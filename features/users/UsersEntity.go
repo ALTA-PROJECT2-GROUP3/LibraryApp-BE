@@ -14,9 +14,11 @@ type Core struct {
 type UserService interface {
 	Register(newUser Core) error
 	Login(username string, password string) (string, Core, error)
+	Update(id int, updateUser Core) error
 }
 
 type UserData interface {
 	Register(newUser Core) error
 	Login(username string) (Core, error)
+	Update(id int, updateUser Core) error
 }

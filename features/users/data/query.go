@@ -39,3 +39,15 @@ func (uq *userQuery) Register(newUser users.Core) error {
 	}
 	return nil
 }
+
+func (uq *userQuery) Update(userID int, updateUser users.Core) error {
+	update := CoreToUpdate(updateUser)
+	tx := uq.db.Model(&User{}).Where("id = ?", userID).Updates(&update)
+	if tx.RowsAffected < 1 {
+		return errors.New("profile no updated")
+	}
+	if tx.Error != nil {
+		return tx.Error
+	}
+	return nil
+}
