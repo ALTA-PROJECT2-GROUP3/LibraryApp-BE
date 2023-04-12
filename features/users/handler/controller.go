@@ -56,9 +56,12 @@ func (uh *UserHandler) Update(c echo.Context) error {
 	if err := c.Bind(&updateInput); err != nil {
 		return c.JSON(helper.ErrorResponse(err))
 	}
+
+	file, _ := c.FormFile("pictures")
+
 	updateUser := users.Core{}
 	copier.Copy(&updateUser, &updateInput)
-	err := uh.srv.Update(userID, updateUser)
+	err := uh.srv.Update(userID, updateUser, file)
 	if err != nil {
 		return c.JSON(helper.ErrorResponse(err))
 	}

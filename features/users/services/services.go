@@ -4,6 +4,7 @@ import (
 	"libraryapp/features/users"
 	"libraryapp/helper"
 	"libraryapp/middlewares"
+	"mime/multipart"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -58,21 +59,32 @@ func (us *userService) Register(newUser users.Core) error {
 	return nil
 }
 
-func (us *userService) Update(userID int, updatedUser users.Core) error {
+func (us *userService) Update(userID int, updateUser users.Core, fileHeader *multipart.FileHeader) error {
 	// Check input validation
-	errVld := us.vld.Struct(updatedUser)
+	errVld := us.vld.Struct(updateUser)
 	if errVld != nil {
 		return errVld
 	}
+
 	// Bcrypt password before updating into database
-	if updatedUser.Password != "" {
-		passBcrypt, errBcrypt := helper.PassBcrypt(updatedUser.Password)
+	if updateUser.Password != "" {
+		passBcrypt, errBcrypt := helper.PassBcrypt(updateUser.Password)
 		if errBcrypt != nil {
 			return errBcrypt
 		}
-		updatedUser.Password = passBcrypt
+		updateUser.Password = passBcrypt
 	}
-	err := us.data.Update(userID, updatedUser)
+
+	if fileHeader != nil {
+		file, _ := fileHeader.Open()
+		uploadURL, err := helper.UploadFile(file, "/users")
+		if err != nil {
+			return err
+		}
+		updateUser.Pictures = uploadURL[0]
+	}
+
+	err := us.data.Update(userID, updateUser)
 	if err != nil {
 		return err
 	}
