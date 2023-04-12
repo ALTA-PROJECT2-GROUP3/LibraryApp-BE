@@ -43,7 +43,7 @@ func UserToCore(data User) users.Core {
 	}
 }
 
-func CoreToUpdate (update users.Core) User {
+func CoreToUpdate(update users.Core) User {
 	return User{
 		Model:    gorm.Model{ID: update.Id},
 		Name:     update.Name,
