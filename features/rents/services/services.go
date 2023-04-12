@@ -18,6 +18,12 @@ func New(repo rents.RentData) rents.RentService {
 	}
 }
 
+// GetById implements rents.RentService
+func (srv *rentService) GetById(id uint) (rents.Core, error) {
+	data, err := srv.data.SelectById(uint(id))
+	return data, err
+}
+
 // Create implements rents.RentService
 func (srv *rentService) Create(newRent rents.Core) error {
 	errValidate := srv.vld.Struct(newRent)
