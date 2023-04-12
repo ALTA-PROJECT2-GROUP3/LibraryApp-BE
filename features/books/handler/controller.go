@@ -58,3 +58,24 @@ func (bk *BookHandler) GetAll(c echo.Context) error {
 	dataResponse := CoreToGetAllBookResp(data)
 	return c.JSON(http.StatusOK, helper.ResponseWithData("Success", dataResponse))
 }
+
+func (rm *BookHandler) Update(c echo.Context) error {
+	userID := int(middlewares.ExtractToken(c))
+	bookID, errCnv := strconv.Atoi(c.Param("id"))
+	if errCnv != nil {
+		return errCnv
+	}
+	// roomID := int(middlewares.ExtractToken(c))
+	updateInput := BookRequest{}
+	if err := c.Bind(&updateInput); err != nil {
+		return c.JSON(helper.ErrorResponse(err))
+	}
+
+	updatebook := books.Core{}
+	copier.Copy(&updatebook, &updateInput)
+	err := rm.srv.Update(userID, bookID, updatebook)
+	if err != nil {
+		return c.JSON(helper.ErrorResponse(err))
+	}
+	return c.JSON(helper.SuccessResponse(http.StatusOK, "update Book successfully"))
+}
