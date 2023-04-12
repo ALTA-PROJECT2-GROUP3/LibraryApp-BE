@@ -10,8 +10,10 @@ type Core struct {
 
 type RentService interface {
 	Create(newRent Core) error
+	GetById(id uint) (Core, error)
 }
 
 type RentData interface {
 	Insert(input Core) error
+	SelectById(id uint) (Core, error)
 }

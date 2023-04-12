@@ -2,10 +2,12 @@ package database
 
 import (
 	"libraryapp/app/config"
+	books "libraryapp/features/books/data"
+	rents "libraryapp/features/rents/data"
 	users "libraryapp/features/users/data"
 
 	"fmt"
-	books "libraryapp/features/books/data"
+
 	"log"
 
 	"gorm.io/driver/mysql"
@@ -33,4 +35,5 @@ func InitDBMySql(cfg config.AppConfig) *gorm.DB {
 func InitialMigration(db *gorm.DB) {
 	db.AutoMigrate(&users.User{})
 	db.AutoMigrate(&books.Book{})
+	db.AutoMigrate(&rents.Rent{})
 }
