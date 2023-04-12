@@ -15,10 +15,12 @@ type BookService interface {
 	Add(newBook Core) error
 	GetAll(page int, name string) ([]Core, error)
 	Update(userid int, id int, updateBook Core) error
+	MyBook(userid int, page int) ([]Core, error)
 }
 
 type BookData interface {
 	Insert(input Core) error
 	SelectAll(limit, offset int, name string) ([]Core, error)
 	Update(userid uint, id uint, input Core) error
+	MyBook(userid int, limit, offset int) ([]Core, error)
 }
