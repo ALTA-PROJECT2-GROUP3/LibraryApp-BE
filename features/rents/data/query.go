@@ -15,3 +15,13 @@ func New(db *gorm.DB) rents.RentData {
 		db: db,
 	}
 }
+
+// Insert implements rents.RentData
+func (rn *rentQuery) Insert(input rents.Core) error {
+	data := CoreToRent(input)
+	tx := rn.db.Create(&data)
+	if tx.Error != nil {
+		return tx.Error
+	}
+	return nil
+}
