@@ -62,3 +62,10 @@ func (srv *bookService) GetBookById(id int) (books.Core, error) {
 	data, err := srv.data.GetBookById(uint(id))
 	return data, err
 }
+func (srv *bookService) DeleteBook(userid int, id int) error {
+	errDelete := srv.data.DeleteBook(userid, id)
+	if errDelete != nil {
+		return errDelete
+	}
+	return nil
+}

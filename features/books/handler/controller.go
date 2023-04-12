@@ -25,6 +25,7 @@ func (bk *BookHandler) Add(c echo.Context) error {
 	addInput := BookRequest{}
 	addInput.UserID = uint(middlewares.ExtractToken(c))
 	if err := c.Bind(&addInput); err != nil {
+		c.Logger().Error("terjadi kesalahan bind", err.Error())
 		return c.JSON(helper.ErrorResponse(err))
 	}
 
@@ -68,6 +69,7 @@ func (bk *BookHandler) Update(c echo.Context) error {
 	// roomID := int(middlewares.ExtractToken(c))
 	updateInput := BookRequest{}
 	if err := c.Bind(&updateInput); err != nil {
+		c.Logger().Error("terjadi kesalahan bind", err.Error())
 		return c.JSON(helper.ErrorResponse(err))
 	}
 
@@ -102,15 +104,31 @@ func (bk *BookHandler) MyBook(c echo.Context) error {
 	return c.JSON(http.StatusOK, helper.ResponseWithData("Success", dataResponse))
 }
 func (bk *BookHandler) GetBookById(c echo.Context) error {
-	roomID, errCnv := strconv.Atoi(c.Param("id"))
+	bookID, errCnv := strconv.Atoi(c.Param("id"))
 	if errCnv != nil {
+		c.Logger().Error("terjadi kesalahan")
 		return errCnv
 	}
-	data, err := bk.srv.GetBookById(roomID)
+	data, err := bk.srv.GetBookById(bookID)
 	if err != nil {
+		c.Logger().Error("terjadi kesalahan", err.Error())
 		return c.JSON(helper.ErrorResponse(err))
 	}
 	res := MyBookResponse{}
 	copier.Copy(&res, &data)
 	return c.JSON(helper.SuccessResponse(http.StatusOK, "detail book successfully displayed", res))
+}
+func (bk *BookHandler) DeleteBook(c echo.Context) error {
+	userID := int(middlewares.ExtractToken(c))
+	bookID, errCnv := strconv.Atoi(c.Param("id"))
+	if errCnv != nil {
+		c.Logger().Error("terjadi kesalahan")
+		return errCnv
+	}
+	err := bk.srv.DeleteBook(userID, bookID)
+	if err != nil {
+		c.Logger().Error("terjadi kesalahan", err.Error())
+		return c.JSON(helper.ErrorResponse(err))
+	}
+	return c.JSON(helper.SuccessResponse(http.StatusOK, "Book successfully deleted"))
 }
