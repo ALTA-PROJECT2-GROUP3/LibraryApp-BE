@@ -33,6 +33,7 @@ jobs:
         name: multiple command
         uses: appleboy/ssh-action@v0.1.9
         with:
+          port: ${{ secrets.PORT }}
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
