@@ -59,7 +59,7 @@ func (bk *BookHandler) GetAll(c echo.Context) error {
 	return c.JSON(http.StatusOK, helper.ResponseWithData("Success", dataResponse))
 }
 
-func (rm *BookHandler) Update(c echo.Context) error {
+func (bk *BookHandler) Update(c echo.Context) error {
 	userID := int(middlewares.ExtractToken(c))
 	bookID, errCnv := strconv.Atoi(c.Param("id"))
 	if errCnv != nil {
@@ -71,9 +71,9 @@ func (rm *BookHandler) Update(c echo.Context) error {
 		return c.JSON(helper.ErrorResponse(err))
 	}
 
-	updatebook := books.Core{}
-	copier.Copy(&updatebook, &updateInput)
-	err := rm.srv.Update(userID, bookID, updatebook)
+	updateBook := books.Core{}
+	copier.Copy(&updateBook, &updateInput)
+	err := bk.srv.Update(userID, bookID, updateBook)
 	if err != nil {
 		return c.JSON(helper.ErrorResponse(err))
 	}

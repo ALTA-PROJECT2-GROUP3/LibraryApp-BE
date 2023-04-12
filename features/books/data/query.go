@@ -1,8 +1,9 @@
 package data
 
 import (
-	"libraryapp/features/books"
 	"errors"
+	"libraryapp/features/books"
+
 	"gorm.io/gorm"
 )
 
@@ -38,9 +39,9 @@ func (bk *bookQuery) Insert(input books.Core) error {
 	return nil
 }
 
-func (bk *bookQuery) Update(userId uint, input books.Core, id uint) error {
+func (bk *bookQuery) Update(userId uint, id uint, input books.Core) error {
 	data := CoreToBook(input)
-	tx := bk.db.Model(&books.Core{}).Where("id = ? AND user_id = ?", id, userId).Updates(&data)
+	tx := bk.db.Model(&Book{}).Where("id = ? AND user_id = ?", id, userId).Updates(&data)
 	if tx.RowsAffected < 1 {
 		return errors.New("book no updated")
 	}
