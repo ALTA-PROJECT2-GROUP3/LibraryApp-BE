@@ -19,7 +19,7 @@ func New(repo rents.RentData) rents.RentService {
 }
 
 // GetById implements rents.RentService
-func (srv *rentService) GetById(id uint) (rents.Core, error) {
+func (srv *rentService) GetById(id int) (rents.Core, error) {
 	data, err := srv.data.SelectById(uint(id))
 	return data, err
 }

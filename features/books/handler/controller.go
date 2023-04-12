@@ -103,6 +103,7 @@ func (bk *BookHandler) MyBook(c echo.Context) error {
 	dataResponse := CoreToGetAllBookResp(data)
 	return c.JSON(http.StatusOK, helper.ResponseWithData("Success", dataResponse))
 }
+
 func (bk *BookHandler) GetBookById(c echo.Context) error {
 	bookID, errCnv := strconv.Atoi(c.Param("id"))
 	if errCnv != nil {
@@ -118,6 +119,7 @@ func (bk *BookHandler) GetBookById(c echo.Context) error {
 	copier.Copy(&res, &data)
 	return c.JSON(helper.SuccessResponse(http.StatusOK, "detail book successfully displayed", res))
 }
+
 func (bk *BookHandler) DeleteBook(c echo.Context) error {
 	userID := int(middlewares.ExtractToken(c))
 	bookID, errCnv := strconv.Atoi(c.Param("id"))
