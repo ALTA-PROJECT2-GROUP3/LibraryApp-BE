@@ -76,3 +76,15 @@ func (bk *bookQuery) GetBookById(id uint) (books.Core, error) {
 
 	return BookToCore(tmp), nil
 }
+func (bk *bookQuery) DeleteBook(userid int, id int) error {
+	tx := bk.db.Where("user_id = ?", userid).Delete(&Book{}, id)
+	if tx.RowsAffected < 1 {
+		log.Error("Terjadi error")
+		return errors.New("no data deleted")
+	}
+	if tx.Error != nil {
+		log.Error("Book tidak ditemukan")
+		return tx.Error
+	}
+	return nil
+}
