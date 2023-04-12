@@ -110,7 +110,7 @@ func (bk *BookHandler) GetBookById(c echo.Context) error {
 	if err != nil {
 		return c.JSON(helper.ErrorResponse(err))
 	}
-	res := BookResponse{}
+	res := MyBookResponse{}
 	copier.Copy(&res, &data)
 	return c.JSON(helper.SuccessResponse(http.StatusOK, "detail book successfully displayed", res))
 }
