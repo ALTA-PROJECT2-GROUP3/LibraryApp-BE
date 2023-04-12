@@ -78,8 +78,8 @@ func (us *userService) Update(userID int, updatedUser users.Core) error {
 	}
 	return nil
 }
-func (us *userService) UserByID(userID int) (users.Core, error) {
-	tmp, err := us.data.UserByID(userID)
+func (us *userService) Profile(userID int) (users.Core, error) {
+	tmp, err := us.data.Profile(userID)
 	if err != nil {
 		return users.Core{}, err
 	}

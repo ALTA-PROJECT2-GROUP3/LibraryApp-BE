@@ -5,7 +5,6 @@ import (
 	"libraryapp/helper"
 	"libraryapp/middlewares"
 	"net/http"
-	"strconv"
 
 	"github.com/jinzhu/copier"
 	"github.com/labstack/echo/v4"
@@ -66,16 +65,13 @@ func (uh *UserHandler) Update(c echo.Context) error {
 	return c.JSON(helper.SuccessResponse(http.StatusCreated, "UpdateProfile successfully"))
 
 }
-func (uh *UserHandler) UserByID(c echo.Context) error {
-	userID, errCnv := strconv.Atoi(c.Param("id"))
-	if errCnv != nil {
-		return errCnv
-	}
-	data, err := uh.srv.UserByID(userID)
+func (uh *UserHandler) Profile(c echo.Context) error {
+	userID := int(middlewares.ExtractToken(c))
+	data, err := uh.srv.Profile(userID)
 	if err != nil {
 		return c.JSON(helper.ErrorResponse(err))
 	}
-	res := users.Core{}
+	res := UserResponse{}
 	copier.Copy(&res, &data)
 	return c.JSON(helper.SuccessResponse(http.StatusOK, "profile successfully displayed", res))
 }
