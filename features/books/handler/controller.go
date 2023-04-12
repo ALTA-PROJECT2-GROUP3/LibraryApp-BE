@@ -32,7 +32,9 @@ func (bk *BookHandler) Add(c echo.Context) error {
 	newBook := books.Core{}
 	copier.Copy(&newBook, &addInput)
 
-	err := bk.srv.Add(newBook)
+	file, _ := c.FormFile("pictures")
+
+	err := bk.srv.Add(newBook, file)
 	if err != nil {
 		return c.JSON(helper.ErrorResponse(err))
 	}
@@ -73,9 +75,11 @@ func (bk *BookHandler) Update(c echo.Context) error {
 		return c.JSON(helper.ErrorResponse(err))
 	}
 
+	file, _ := c.FormFile("pictures")
+
 	updateBook := books.Core{}
 	copier.Copy(&updateBook, &updateInput)
-	err := bk.srv.Update(userID, bookID, updateBook)
+	err := bk.srv.Update(userID, bookID, updateBook, file)
 	if err != nil {
 		return c.JSON(helper.ErrorResponse(err))
 	}

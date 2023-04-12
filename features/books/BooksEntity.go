@@ -1,5 +1,7 @@
 package books
 
+import "mime/multipart"
+
 type Core struct {
 	Id          uint
 	Title       string `validate:"required"`
@@ -12,9 +14,9 @@ type Core struct {
 }
 
 type BookService interface {
-	Add(newBook Core) error
+	Add(newBook Core, file *multipart.FileHeader) error
 	GetAll(page int, name string) ([]Core, error)
-	Update(userid int, id int, updateBook Core) error
+	Update(userid int, id int, updateBook Core, file *multipart.FileHeader) error
 	MyBook(userid int, page int) ([]Core, error)
 	GetBookById(id int) (Core, error)
 	DeleteBook(userid int, id int) error

@@ -2,6 +2,8 @@ package services
 
 import (
 	"libraryapp/features/books"
+	"libraryapp/helper"
+	"mime/multipart"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -27,7 +29,16 @@ func (srv *bookService) MyBook(userid int, page int) ([]books.Core, error) {
 }
 
 // Update implements books.BookService
-func (srv *bookService) Update(userid int, id int, updateBook books.Core) error {
+func (srv *bookService) Update(userid int, id int, updateBook books.Core, fileHeader *multipart.FileHeader) error {
+	if fileHeader != nil {
+		file, _ := fileHeader.Open()
+		uploadURL, err := helper.UploadFile(file, "/books")
+		if err != nil {
+			return err
+		}
+		updateBook.Pictures = uploadURL[0]
+	}
+
 	errUpdate := srv.data.Update(uint(userid), uint(id), updateBook)
 	if errUpdate != nil {
 		return errUpdate
@@ -45,10 +56,19 @@ func (srv *bookService) GetAll(page int, name string) ([]books.Core, error) {
 }
 
 // Add implements books.BookService
-func (srv *bookService) Add(newBook books.Core) error {
+func (srv *bookService) Add(newBook books.Core, fileHeader *multipart.FileHeader) error {
 	errValidate := srv.vld.Struct(newBook)
 	if errValidate != nil {
 		return errValidate
+	}
+
+	if fileHeader != nil {
+		file, _ := fileHeader.Open()
+		uploadURL, err := helper.UploadFile(file, "/books")
+		if err != nil {
+			return err
+		}
+		newBook.Pictures = uploadURL[0]
 	}
 
 	errInsert := srv.data.Insert(newBook)
