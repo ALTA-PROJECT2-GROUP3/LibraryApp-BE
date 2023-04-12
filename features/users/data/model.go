@@ -2,6 +2,7 @@ package data
 
 import (
 	modelBook "libraryapp/features/books/data"
+	modelRent "libraryapp/features/rents/data"
 
 	"libraryapp/features/users"
 
@@ -18,6 +19,7 @@ type User struct {
 	Phone    string
 	Pictures string
 	Books    []modelBook.Book
+	Rents    []modelRent.Rent
 }
 
 func CoreToUser(data users.Core) User {
