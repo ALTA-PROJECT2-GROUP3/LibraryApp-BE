@@ -18,6 +18,15 @@ func New(repo rents.RentData) rents.RentService {
 	}
 }
 
+// History implements rents.RentService
+func (srv *rentService) History(userID int) ([]rents.Core, error) {
+	tmp, err := srv.data.History(userID)
+	if err != nil {
+		return nil, err
+	}
+	return tmp, nil
+}
+
 // GetById implements rents.RentService
 func (srv *rentService) GetById(id int) (rents.Core, error) {
 	data, err := srv.data.SelectById(uint(id))
