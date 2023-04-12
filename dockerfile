@@ -12,4 +12,4 @@ WORKDIR /app/
 
 COPY --from=builder /app/ .
 
-ENTRYPOINT ["/app/main"
+ENTRYPOINT ["/app/main"]
