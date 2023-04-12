@@ -51,3 +51,15 @@ func (uq *userQuery) Update(userID int, updateUser users.Core) error {
 	}
 	return nil
 }
+
+func (uq *userQuery) UserByID(userID int) (users.Core, error) {
+	tmp := User{}
+	tx := uq.db.Where("id = ?", userID).First(&tmp)
+	if tx.RowsAffected < 1 {
+		return users.Core{}, errors.New("user not found")
+	}
+	if tx.Error != nil {
+		return users.Core{}, tx.Error
+	}
+	return UserToCore(tmp), nil
+}
