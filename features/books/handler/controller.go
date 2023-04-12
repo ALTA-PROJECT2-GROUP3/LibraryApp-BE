@@ -101,3 +101,16 @@ func (bk *BookHandler) MyBook(c echo.Context) error {
 	dataResponse := CoreToGetAllBookResp(data)
 	return c.JSON(http.StatusOK, helper.ResponseWithData("Success", dataResponse))
 }
+func (bk *BookHandler) GetBookById(c echo.Context) error {
+	roomID, errCnv := strconv.Atoi(c.Param("id"))
+	if errCnv != nil {
+		return errCnv
+	}
+	data, err := bk.srv.GetBookById(roomID)
+	if err != nil {
+		return c.JSON(helper.ErrorResponse(err))
+	}
+	res := BookResponse{}
+	copier.Copy(&res, &data)
+	return c.JSON(helper.SuccessResponse(http.StatusOK, "detail book successfully displayed", res))
+}
