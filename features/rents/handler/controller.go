@@ -5,6 +5,7 @@ import (
 	"libraryapp/helper"
 	"libraryapp/middlewares"
 	"net/http"
+	"strconv"
 
 	"github.com/jinzhu/copier"
 	"github.com/labstack/echo/v4"
@@ -36,4 +37,20 @@ func (rn *RentHandler) Add(c echo.Context) error {
 		return c.JSON(helper.ErrorResponse(err))
 	}
 	return c.JSON(helper.SuccessResponse(http.StatusCreated, "create rent successfully"))
+}
+
+func (rn *RentHandler) GetById(c echo.Context) error {
+	rentID, errCnv := strconv.Atoi(c.Param("id"))
+	if errCnv != nil {
+		c.Logger().Error("terjadi kesalahan")
+		return errCnv
+	}
+	data, err := rn.srv.GetById(rentID)
+	if err != nil {
+		c.Logger().Error("terjadi kesalahan", err.Error())
+		return c.JSON(helper.ErrorResponse(err))
+	}
+	res := RentResponse{}
+	copier.Copy(&res, &data)
+	return c.JSON(helper.SuccessResponse(http.StatusOK, "detail rent successfully displayed", res))
 }
