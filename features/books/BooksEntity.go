@@ -16,6 +16,7 @@ type BookService interface {
 	GetAll(page int, name string) ([]Core, error)
 	Update(userid int, id int, updateBook Core) error
 	MyBook(userid int, page int) ([]Core, error)
+	GetBookById(id int) (Core, error)
 }
 
 type BookData interface {
@@ -23,4 +24,5 @@ type BookData interface {
 	SelectAll(limit, offset int, name string) ([]Core, error)
 	Update(userid uint, id uint, input Core) error
 	MyBook(userid int, limit, offset int) ([]Core, error)
+	GetBookById(id uint) (Core, error)
 }

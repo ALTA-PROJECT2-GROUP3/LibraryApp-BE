@@ -30,5 +30,6 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.GET("/books", bookHdl.GetAll)
 	e.PUT("/books/:id", bookHdl.Update, middlewares.JWTMiddleware())
 	e.GET("/mybook", bookHdl.MyBook, middlewares.JWTMiddleware())
+	e.GET("/booksbyid/:id", bookHdl.GetBookById)
 
 }
