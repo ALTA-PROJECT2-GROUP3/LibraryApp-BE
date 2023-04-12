@@ -5,13 +5,13 @@ type Core struct {
 	StartDate string `validate:"required"`
 	EndDate   string `validate:"required"`
 	UserID    uint
-	BookID    string `validate:"required"`
+	BookID    uint `validate:"required"`
 }
 
 type RentService interface {
-	Create(newRent Core) (Core, error)
+	Create(newRent Core) error
 }
 
 type RentData interface {
-	Insert(input Core) (Core, error)
+	Insert(input Core) error
 }

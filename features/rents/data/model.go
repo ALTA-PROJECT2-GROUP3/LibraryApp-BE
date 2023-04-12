@@ -11,7 +11,7 @@ type Rent struct {
 	StartDate string
 	EndDate   string
 	UserID    uint
-	BookID    string
+	BookID    uint
 }
 
 func CoreToRent(data rents.Core) Rent {
