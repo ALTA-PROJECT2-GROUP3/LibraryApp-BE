@@ -17,6 +17,17 @@ func New(db *gorm.DB) books.BookData {
 	}
 }
 
+// MyBook implements books.BookData
+func (bk *bookQuery) MyBook(userid int, limit int, offset int) ([]books.Core, error) {
+	var booksModel []Book
+	tx := bk.db.Limit(limit).Offset(offset).Where("user_id = ?", userid).Find(&booksModel)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	booksCoreAll := ListModelToCore(booksModel)
+	return booksCoreAll, nil
+}
+
 // SelectAll implements books.BookData
 func (bk *bookQuery) SelectAll(limit int, offset int, name string) ([]books.Core, error) {
 	nameSearch := "%" + name + "%"

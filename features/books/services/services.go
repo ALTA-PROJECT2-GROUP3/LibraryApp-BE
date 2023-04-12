@@ -18,6 +18,14 @@ func New(repo books.BookData) books.BookService {
 	}
 }
 
+// MyBook implements books.BookService
+func (srv *bookService) MyBook(userid int, page int) ([]books.Core, error) {
+	limit := 10
+	offset := (page - 1) * limit
+	data, err := srv.data.MyBook(userid, limit, offset)
+	return data, err
+}
+
 // Update implements books.BookService
 func (srv *bookService) Update(userid int, id int, updateBook books.Core) error {
 	errUpdate := srv.data.Update(uint(userid), uint(id), updateBook)
