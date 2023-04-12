@@ -54,3 +54,14 @@ func (rn *RentHandler) GetById(c echo.Context) error {
 	copier.Copy(&res, &data)
 	return c.JSON(helper.SuccessResponse(http.StatusOK, "detail rent successfully displayed", res))
 }
+
+func (rn *RentHandler) History(c echo.Context) error {
+	userID := int(middlewares.ExtractToken(c))
+	data, err := rn.srv.History(userID)
+	if err != nil {
+		return c.JSON(helper.ErrorResponse(err))
+	}
+	res := ListHistoryResponse{}
+	copier.Copy(&res, &data)
+	return c.JSON(helper.SuccessResponse(http.StatusOK, "success show history", res))
+}

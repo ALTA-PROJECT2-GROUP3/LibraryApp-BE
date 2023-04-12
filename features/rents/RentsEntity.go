@@ -11,9 +11,11 @@ type Core struct {
 type RentService interface {
 	Create(newRent Core) error
 	GetById(id int) (Core, error)
+	History(userID int) ([]Core, error)
 }
 
 type RentData interface {
 	Insert(input Core) error
 	SelectById(id uint) (Core, error)
+	History(userID int) ([]Core, error)
 }

@@ -18,6 +18,16 @@ func New(db *gorm.DB) rents.RentData {
 	}
 }
 
+// History implements rents.RentData
+func (rn *rentQuery) History(userID int) ([]rents.Core, error) {
+	tmp := []Rent{}
+	tx := rn.db.Where("rents.user_id = ?", userID).Select("rents.start_date, rents.end_date, books.id AS book_id").Joins("Join books ON rents.book_id = books.id").Find(&tmp)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	return ListModelToCore(tmp), nil
+}
+
 // SelectById implements rents.RentData
 func (rn *rentQuery) SelectById(id uint) (rents.Core, error) {
 	tmp := Rent{}
