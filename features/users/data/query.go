@@ -52,7 +52,7 @@ func (uq *userQuery) Update(userID int, updateUser users.Core) error {
 	return nil
 }
 
-func (uq *userQuery) UserByID(userID int) (users.Core, error) {
+func (uq *userQuery) Profile(userID int) (users.Core, error) {
 	tmp := User{}
 	tx := uq.db.Where("id = ?", userID).First(&tmp)
 	if tx.RowsAffected < 1 {
