@@ -79,3 +79,25 @@ func (bk *BookHandler) Update(c echo.Context) error {
 	}
 	return c.JSON(helper.SuccessResponse(http.StatusOK, "update Book successfully"))
 }
+
+func (bk *BookHandler) MyBook(c echo.Context) error {
+	userID := int(middlewares.ExtractToken(c))
+	var pageNumber int = 1
+	pageParam := c.QueryParam("page")
+	if pageParam != "" {
+		pageConv, errConv := strconv.Atoi(pageParam)
+		if errConv != nil {
+			return c.JSON(http.StatusInternalServerError, helper.Response("Failed, page must number"))
+		} else {
+			pageNumber = pageConv
+		}
+	}
+
+	// nameParam := c.QueryParam("name")
+	data, err := bk.srv.MyBook(userID, pageNumber)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.Response("Failed, error read data"))
+	}
+	dataResponse := CoreToGetAllBookResp(data)
+	return c.JSON(http.StatusOK, helper.ResponseWithData("Success", dataResponse))
+}
