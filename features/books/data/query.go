@@ -19,13 +19,13 @@ func New(db *gorm.DB) books.BookData {
 // SelectAll implements books.BookData
 func (bk *bookQuery) SelectAll(limit int, offset int, name string) ([]books.Core, error) {
 	nameSearch := "%" + name + "%"
-	var roomsModel []Book
-	tx := bk.db.Limit(limit).Offset(offset).Where("rooms.name LIKE ?", nameSearch).Select("rooms.id, rooms.name, rooms.price, rooms.pictures, rooms.availability, rooms.description, rooms.location, users.name AS user_name, AVG(feedbacks.rating) AS rating_room").Joins("JOIN users ON rooms.user_id = users.id").Joins("LEFT JOIN feedbacks ON rooms.id = feedbacks.room_id").Group("rooms.id").Find(&roomsModel)
+	var booksModel []Book
+	tx := bk.db.Limit(limit).Offset(offset).Where("books.title LIKE ?", nameSearch).Select("books.id, books.title, books.pictures, users.name AS user_name").Joins("JOIN users ON books.user_id = users.id").Group("books.id").Find(&booksModel)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
-	roomsCoreAll := ListModelToCore(roomsModel)
-	return roomsCoreAll, nil
+	booksCoreAll := ListModelToCore(booksModel)
+	return booksCoreAll, nil
 }
 
 // Insert implements books.BookData
