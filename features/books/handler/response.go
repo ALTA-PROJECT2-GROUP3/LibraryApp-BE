@@ -10,6 +10,14 @@ type AllBookResponse struct {
 	Pictures string `json:"pictures" form:"pictures"`
 	UserName string `json:"user_name" form:"user_name"`
 }
+type BookResponse struct {
+	Title       string `json:"title" form:"title"`
+	Publisher   string `json:"publisher" form:"publisher"`
+	Year        string `json:"year" form:"year"`
+	Description string `json:"description" form:"description"`
+	Pictures    string `json:"pictures" form:"pictures"`
+	UserName    string `json:"user_name" form:"user_name"`
+}
 
 func CoreToGetAllBookRespB(data books.Core) AllBookResponse {
 	return AllBookResponse{

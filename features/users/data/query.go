@@ -4,6 +4,7 @@ import (
 	"errors"
 	"libraryapp/features/users"
 
+	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"
 )
 
@@ -22,9 +23,11 @@ func (uq *userQuery) Login(username string) (users.Core, error) {
 	tmp := User{}
 	tx := uq.db.Where("username = ?", username).First(&tmp)
 	if tx.RowsAffected < 1 {
+		log.Error("Terjadi error saat select user")
 		return users.Core{}, errors.New("username not found")
 	}
 	if tx.Error != nil {
+		log.Error("Data tidak ditemukan")
 		return users.Core{}, tx.Error
 	}
 	return UserToCore(tmp), nil

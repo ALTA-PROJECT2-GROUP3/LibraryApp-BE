@@ -49,3 +49,8 @@ func (srv *bookService) Add(newBook books.Core) error {
 	}
 	return nil
 }
+
+func (srv *bookService) GetBookById(id int) (books.Core, error) {
+	data, err := srv.data.GetBookById(uint(id))
+	return data, err
+}

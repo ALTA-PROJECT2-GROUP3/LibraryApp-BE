@@ -17,5 +17,5 @@ func main() {
 	e := echo.New()
 	e.Use(middleware.CORS())
 	router.InitRouter(db, e)
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.Start(":8000"))
 }

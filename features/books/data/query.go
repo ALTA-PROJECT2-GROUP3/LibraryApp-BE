@@ -4,6 +4,7 @@ import (
 	"errors"
 	"libraryapp/features/books"
 
+	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"
 )
 
@@ -49,4 +50,18 @@ func (bk *bookQuery) Update(userId uint, id uint, input books.Core) error {
 		return tx.Error
 	}
 	return nil
+}
+func (bk *bookQuery) GetBookById(id uint) (books.Core, error) {
+	tmp := Book{}
+	tx := bk.db.Where("id = ?", id).First(&tmp)
+	if tx.RowsAffected < 1 {
+		log.Error("Terjadi error saat select book")
+		return books.Core{}, errors.New("room not found")
+	}
+	if tx.Error != nil {
+		log.Error("Book tidak ditemukan")
+		return books.Core{}, tx.Error
+	}
+
+	return BookToCore(tmp), nil
 }
