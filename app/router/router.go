@@ -28,5 +28,6 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	bookHdl := _bookHandler.New(bookSrv)
 	e.POST("/books", bookHdl.Add, middlewares.JWTMiddleware())
 	e.GET("/books", bookHdl.GetAll)
+	e.PUT("/books", bookHdl.Update, middlewares.JWTMiddleware())
 
 }
