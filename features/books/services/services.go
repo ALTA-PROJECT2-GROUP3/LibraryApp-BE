@@ -16,7 +16,22 @@ func New(repo books.BookData) books.BookService {
 		data: repo,
 		vld:  validator.New(),
 	}
+} 
+// Update implements books.BookService
+func (srv *bookService) Update(userid int, id int, updatebook books.Core) {
+	errUpdate := srv.data.Update(uint(userid), id, updatebook)
+	if errUpdate != nil {
+		return errUpdate
+	}
+	
+	errUpdate := srv.data.Update(updatebook)
+	if errUpdate != nil {
+		return errUpdate
+	}
+	return nil
 }
+
+
 
 // GetAll implements books.BookService
 func (srv *bookService) GetAll(page int, name string) ([]books.Core, error) {
