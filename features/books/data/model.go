@@ -11,6 +11,7 @@ type Book struct {
 	Title       string
 	Publisher   string
 	Year        string
+	Category    string
 	Description string
 	Pictures    string
 	UserID      uint
@@ -23,6 +24,7 @@ func CoreToBook(data books.Core) Book {
 		Title:       data.Title,
 		Publisher:   data.Publisher,
 		Year:        data.Year,
+		Category:    data.Category,
 		Description: data.Description,
 		Pictures:    data.Pictures,
 		UserID:      data.UserID,
@@ -36,6 +38,7 @@ func BookToCore(data Book) books.Core {
 		Title:       data.Title,
 		Publisher:   data.Publisher,
 		Year:        data.Year,
+		Category:    data.Category,
 		Description: data.Description,
 		Pictures:    data.Pictures,
 		UserID:      data.UserID,
