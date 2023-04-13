@@ -26,7 +26,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}:latest 
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/be16:latest 
       - 
         name: multiple command
         uses: appleboy/ssh-action@v0.1.9
@@ -38,5 +38,5 @@ jobs:
           script: |
             docker stop ${{ secrets.CNAME }}
             docker rm ${{ secrets.CNAME }}
-            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}:latest
-            docker run --name ${{ secrets.CNAME }} -d -p 8080:8080 --link="databook" -e DB_USER=${{ secrets.DBUSER }} -e DB_PASS=${{ secrets.DBPASS }} -e DB_HOST=${{ secrets.DBHOST }} -e DB_PORT=${{ secrets.DBPORT }} -e DB_NAME=${{ secrets.DBNAME }} -e JWT_KEY=${{ secrets.JWT_KEY }} ${{ secrets.DOCKERHUB_USERNAME }}:latest
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/be16:latest
+            docker run --name ${{ secrets.CNAME }} -d -p 8080:8080 --link="databook" -e DB_USER=${{ secrets.DBUSER }} -e DB_PASS=${{ secrets.DBPASS }} -e DB_HOST=${{ secrets.DBHOST }} -e DB_PORT=${{ secrets.DBPORT }} -e DB_NAME=${{ secrets.DBNAME }} -e JWT_KEY=${{ secrets.JWT_KEY }} ${{ secrets.DOCKERHUB_USERNAME }}/be16:latest
