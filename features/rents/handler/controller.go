@@ -75,8 +75,8 @@ func (rn *RentHandler) HistoryByUserId(c echo.Context) error {
 		c.Logger().Error("terjadi kesalahan", err.Error())
 		return c.JSON(helper.ErrorResponse(err))
 	}
-	res := ListCoreToRoomResp
-	copier.Copy(&res, &data)
+	res := ListCoreToRoomResp(data)
+	// copier.Copy(&res, &data)
 	return c.JSON(helper.SuccessResponse(http.StatusOK, "success show history", res))
 }
 
@@ -87,7 +87,7 @@ func (rn *RentHandler) HistoryMyBookRented(c echo.Context) error {
 		c.Logger().Error("terjadi kesalahan", err.Error())
 		return c.JSON(helper.ErrorResponse(err))
 	}
-	res := ListCoreToRoomResp
-	copier.Copy(&res, &data)
+	res := ListCoreToRoomResp(data)
+	// copier.Copy(&res, &data)
 	return c.JSON(helper.SuccessResponse(http.StatusOK, "success show history", res))
 }
