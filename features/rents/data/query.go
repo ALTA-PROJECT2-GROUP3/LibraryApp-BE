@@ -31,7 +31,7 @@ func (rn *rentQuery) History(userID int) ([]rents.Core, error) {
 // SelectById implements rents.RentData
 func (rn *rentQuery) SelectById(id uint) (rents.Core, error) {
 	tmp := Rent{}
-	tx := rn.db.Where("id = ?", id).First(&tmp)
+	tx := rn.db.Preload("RentDetails").Where("id = ?", id).First(&tmp)
 	if tx.RowsAffected < 1 {
 		log.Error("Terjadi error saat select rent")
 		return rents.Core{}, errors.New("rent not found")

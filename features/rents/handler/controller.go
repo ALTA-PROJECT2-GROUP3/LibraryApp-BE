@@ -62,8 +62,8 @@ func (rn *RentHandler) GetById(c echo.Context) error {
 		c.Logger().Error("terjadi kesalahan", err.Error())
 		return c.JSON(helper.ErrorResponse(err))
 	}
-	res := RentResponse{}
-	copier.Copy(&res, &data)
+	res := CoreToResponse(data)
+
 	return c.JSON(helper.SuccessResponse(http.StatusOK, "detail rent successfully displayed", res))
 }
 
