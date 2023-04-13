@@ -36,6 +36,7 @@ func (bk *BookHandler) Add(c echo.Context) error {
 
 	err := bk.srv.Add(newBook, file)
 	if err != nil {
+		c.Logger().Error("terjadi kesalahan saat add Book", err.Error())
 		return c.JSON(helper.ErrorResponse(err))
 	}
 	return c.JSON(helper.SuccessResponse(http.StatusCreated, "add book successfully"))
@@ -47,6 +48,7 @@ func (bk *BookHandler) GetAll(c echo.Context) error {
 	if pageParam != "" {
 		pageConv, errConv := strconv.Atoi(pageParam)
 		if errConv != nil {
+			c.Logger().Error("terjadi kesalahan")
 			return c.JSON(http.StatusInternalServerError, helper.Response("Failed, page must number"))
 		} else {
 			pageNumber = pageConv
@@ -66,6 +68,7 @@ func (bk *BookHandler) Update(c echo.Context) error {
 	userID := int(middlewares.ExtractToken(c))
 	bookID, errCnv := strconv.Atoi(c.Param("id"))
 	if errCnv != nil {
+		c.Logger().Error("Book tidak ditemukan")
 		return errCnv
 	}
 	// roomID := int(middlewares.ExtractToken(c))
@@ -81,6 +84,7 @@ func (bk *BookHandler) Update(c echo.Context) error {
 	copier.Copy(&updateBook, &updateInput)
 	err := bk.srv.Update(userID, bookID, updateBook, file)
 	if err != nil {
+		c.Logger().Error("terjadi kesalahan Update Book", err.Error())
 		return c.JSON(helper.ErrorResponse(err))
 	}
 	return c.JSON(helper.SuccessResponse(http.StatusOK, "update Book successfully"))
@@ -93,6 +97,7 @@ func (bk *BookHandler) MyBook(c echo.Context) error {
 	if pageParam != "" {
 		pageConv, errConv := strconv.Atoi(pageParam)
 		if errConv != nil {
+			c.Logger().Error("terjadi kesalahan")
 			return c.JSON(http.StatusInternalServerError, helper.Response("Failed, page must number"))
 		} else {
 			pageNumber = pageConv
@@ -102,6 +107,7 @@ func (bk *BookHandler) MyBook(c echo.Context) error {
 	// nameParam := c.QueryParam("name")
 	data, err := bk.srv.MyBook(userID, pageNumber)
 	if err != nil {
+		c.Logger().Error("terjadi kesalahan")
 		return c.JSON(http.StatusInternalServerError, helper.Response("Failed, error read data"))
 	}
 	dataResponse := CoreToGetAllBookResp(data)

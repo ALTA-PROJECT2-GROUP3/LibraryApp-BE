@@ -37,6 +37,7 @@ func (rn *RentHandler) Add(c echo.Context) error {
 
 	rentID, err := rn.srv.Create(newRent)
 	if err != nil {
+		c.Logger().Error("terjadi kesalahan saat create", err.Error())
 		return c.JSON(helper.ErrorResponse(err))
 	}
 
@@ -71,6 +72,7 @@ func (rn *RentHandler) History(c echo.Context) error {
 	userID := int(middlewares.ExtractToken(c))
 	data, err := rn.srv.History(userID)
 	if err != nil {
+		c.Logger().Error("terjadi kesalahan", err.Error())
 		return c.JSON(helper.ErrorResponse(err))
 	}
 	res := ListHistoryResponse{}
