@@ -18,9 +18,18 @@ func New(repo rents.RentData) rents.RentService {
 	}
 }
 
-// History implements rents.RentService
-func (srv *rentService) History(userID int) ([]rents.Core, error) {
-	tmp, err := srv.data.History(userID)
+// HistoryByUserId implements rents.RentService
+func (srv *rentService) HistoryByUserId(userID int) ([]rents.Core, error) {
+	tmp, err := srv.data.HistoryByUserId(userID)
+	if err != nil {
+		return nil, err
+	}
+	return tmp, nil
+}
+
+// HistoryMyBookRented implements rents.RentService
+func (srv *rentService) HistoryMyBookRented(userID uint) ([]rents.Core, error) {
+	tmp, err := srv.data.HistoryMyBookRented(userID)
 	if err != nil {
 		return nil, err
 	}

@@ -52,6 +52,7 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	rentHdl := _rentHandler.New(rentSrv, rentdetailSrv)
 	e.POST("/rents", rentHdl.Add, middlewares.JWTMiddleware())
 	e.GET("/rents/:id", rentHdl.GetById)
-	e.GET("/history", rentHdl.History, middlewares.JWTMiddleware())
+	e.GET("/history", rentHdl.HistoryByUserId, middlewares.JWTMiddleware())
+	e.GET("/bookrented", rentHdl.HistoryMyBookRented, middlewares.JWTMiddleware())
 
 }

@@ -1,6 +1,7 @@
 package data
 
 import (
+	_book "libraryapp/features/books/data"
 	"libraryapp/features/rentdetails"
 
 	"gorm.io/gorm"
@@ -10,6 +11,7 @@ type Rentdetail struct {
 	gorm.Model
 	BookID uint
 	RentID uint
+	Book   _book.Book `gorm:"foreignKey:BookID"`
 }
 
 func CoreToRentdetail(data rentdetails.Core) Rentdetail {
