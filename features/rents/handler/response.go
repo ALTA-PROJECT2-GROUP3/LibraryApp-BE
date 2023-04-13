@@ -1,20 +1,21 @@
 package handler
 
 import (
+	_book "libraryapp/features/books/handler"
 	"libraryapp/features/rentdetails/handler"
 	"libraryapp/features/rents"
 )
 
 type RentResponse struct {
-	StartDate  string                       `json:"start_date" form:"start_date"`
-	EndDate    string                       `json:"end_date" form:"end_date"`
-	UserID     uint                         `json:"user_id" form:"user_id"`
+	StartDate  string                       `json:"start_date"`
+	EndDate    string                       `json:"end_date"`
+	UserID     uint                         `json:"user_id"`
 	RentDetail []handler.RentdetailResponse `json:"rent_detail"`
 }
 
 type HistoryRentResponse struct {
-	StartDate string `json:"start_date" form:"start_date"`
-	EndDate   string `json:"end_date" form:"end_date"`
+	StartDate string `json:"start_date"`
+	EndDate   string `json:"end_date"`
 }
 
 type ListHistoryResponse []HistoryRentResponse
@@ -27,9 +28,16 @@ func CoreToResponse(data rents.Core) RentResponse {
 	}
 
 	for _, v := range data.Rentdetail {
+		book := _book.AllBookResponse{
+			ID:       v.Book.Id,
+			Title:    v.Book.Title,
+			Pictures: v.Book.Pictures,
+			UserName: v.Book.UserName,
+		}
 		coredetail := handler.RentdetailResponse{
 			BookID: v.BookID,
 			RentID: v.RentID,
+			Book:   book,
 		}
 		result.RentDetail = append(result.RentDetail, coredetail)
 

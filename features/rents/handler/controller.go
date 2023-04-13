@@ -68,14 +68,26 @@ func (rn *RentHandler) GetById(c echo.Context) error {
 	return c.JSON(helper.SuccessResponse(http.StatusOK, "detail rent successfully displayed", res))
 }
 
-func (rn *RentHandler) History(c echo.Context) error {
+func (rn *RentHandler) HistoryByUserId(c echo.Context) error {
 	userID := int(middlewares.ExtractToken(c))
-	data, err := rn.srv.History(userID)
+	data, err := rn.srv.HistoryByUserId(userID)
 	if err != nil {
 		c.Logger().Error("terjadi kesalahan", err.Error())
 		return c.JSON(helper.ErrorResponse(err))
 	}
-	res := ListHistoryResponse{}
+	res := ListCoreToRoomResp
+	copier.Copy(&res, &data)
+	return c.JSON(helper.SuccessResponse(http.StatusOK, "success show history", res))
+}
+
+func (rn *RentHandler) HistoryMyBookRented(c echo.Context) error {
+	userID := int(middlewares.ExtractToken(c))
+	data, err := rn.srv.HistoryMyBookRented(uint(userID))
+	if err != nil {
+		c.Logger().Error("terjadi kesalahan", err.Error())
+		return c.JSON(helper.ErrorResponse(err))
+	}
+	res := ListCoreToRoomResp
 	copier.Copy(&res, &data)
 	return c.JSON(helper.SuccessResponse(http.StatusOK, "success show history", res))
 }

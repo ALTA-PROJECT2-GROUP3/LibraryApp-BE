@@ -18,21 +18,46 @@ func New(db *gorm.DB) rents.RentData {
 	}
 }
 
-// History implements rents.RentData
-func (rn *rentQuery) History(userID int) ([]rents.Core, error) {
+// HistoryMyBookRented implements rents.RentData
+func (rn *rentQuery) HistoryMyBookRented(userID uint) ([]rents.Core, error) {
 	tmp := []Rent{}
-	tx := rn.db.Where("rents.user_id = ?", userID).Select("rents.start_date, rents.end_date, books.id AS book_id").Joins("Join books ON rents.book_id = books.id").Find(&tmp)
-	if tx.Error != nil {
-		log.Error("Terjadi error saat select")
-		return nil, tx.Error
+	tx := rn.db.Preload("RentDetails").Preload("RentDetails.Book").
+		Select("rents.*").
+		Joins("inner join rents.id = rentdetails.rent_id").
+		Joins("inner join books.id = rentdetails.book_id").
+		Where("books.user_id = ?", userID).Find(&tmp)
+	if tx.RowsAffected < 1 {
+		log.Error("Terjadi error saat select rent")
+		return []rents.Core{}, errors.New("rent not found")
 	}
+	if tx.Error != nil {
+		log.Error("Rent tidak ditemukan")
+		return []rents.Core{}, tx.Error
+	}
+
+	return ListModelToCore(tmp), nil
+}
+
+// History implements rents.RentData
+func (rn *rentQuery) HistoryByUserId(userID int) ([]rents.Core, error) {
+	tmp := []Rent{}
+	tx := rn.db.Preload("RentDetails").Preload("RentDetails.Book").Where("user_id = ?", userID).Find(&tmp)
+	if tx.RowsAffected < 1 {
+		log.Error("Terjadi error saat select rent")
+		return []rents.Core{}, errors.New("rent not found")
+	}
+	if tx.Error != nil {
+		log.Error("Rent tidak ditemukan")
+		return []rents.Core{}, tx.Error
+	}
+
 	return ListModelToCore(tmp), nil
 }
 
 // SelectById implements rents.RentData
 func (rn *rentQuery) SelectById(id uint) (rents.Core, error) {
 	tmp := Rent{}
-	tx := rn.db.Preload("RentDetails").Where("id = ?", id).First(&tmp)
+	tx := rn.db.Preload("RentDetails").Preload("RentDetails.Book").Where("id = ?", id).First(&tmp)
 	if tx.RowsAffected < 1 {
 		log.Error("Terjadi error saat select rent")
 		return rents.Core{}, errors.New("rent not found")

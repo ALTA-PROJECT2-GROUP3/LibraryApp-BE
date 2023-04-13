@@ -6,9 +6,9 @@ import (
 
 type AllBookResponse struct {
 	ID       uint   `json:"id"`
-	Title    string `json:"title" form:"title"`
-	Pictures string `json:"pictures" form:"pictures"`
-	UserName string `json:"user_name" form:"user_name"`
+	Title    string `json:"title"`
+	Pictures string `json:"pictures"`
+	UserName string `json:"user_name"`
 }
 
 func CoreToGetAllBookRespB(data books.Core) AllBookResponse {
@@ -30,8 +30,8 @@ func CoreToGetAllBookResp(data []books.Core) []AllBookResponse {
 
 type MyBookResponse struct {
 	ID       uint   `json:"id"`
-	Title    string `json:"title" form:"title"`
-	Pictures string `json:"pictures" form:"pictures"`
+	Title    string `json:"title"`
+	Pictures string `json:"pictures"`
 }
 
 func CoreToGetMyBook(data books.Core) MyBookResponse {

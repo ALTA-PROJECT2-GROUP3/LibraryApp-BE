@@ -13,11 +13,13 @@ type Core struct {
 type RentService interface {
 	Create(newRent Core) (uint, error)
 	GetById(id int) (Core, error)
-	History(userID int) ([]Core, error)
+	HistoryByUserId(userID int) ([]Core, error)
+	HistoryMyBookRented(userID uint) ([]Core, error)
 }
 
 type RentData interface {
 	Insert(input Core) (uint, error)
 	SelectById(id uint) (Core, error)
-	History(userID int) ([]Core, error)
+	HistoryByUserId(userID int) ([]Core, error)
+	HistoryMyBookRented(userID uint) ([]Core, error)
 }
