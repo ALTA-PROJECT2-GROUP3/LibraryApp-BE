@@ -7,6 +7,7 @@ type Core struct {
 	Title       string `validate:"required"`
 	Publisher   string `validate:"required"`
 	Year        string `validate:"required"`
+	Category    string `validate:"required"`
 	Description string `validate:"required"`
 	Pictures    string
 	UserID      uint
