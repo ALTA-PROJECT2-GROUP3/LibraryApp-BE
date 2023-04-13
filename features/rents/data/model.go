@@ -1,6 +1,7 @@
 package data
 
 import (
+	"libraryapp/features/rentdetails"
 	modelRentdetail "libraryapp/features/rentdetails/data"
 	"libraryapp/features/rents"
 
@@ -25,12 +26,24 @@ func CoreToRent(data rents.Core) Rent {
 }
 
 func RentToCore(data Rent) rents.Core {
-	return rents.Core{
+	result := rents.Core{
 		Id:        data.ID,
 		StartDate: data.StartDate,
 		EndDate:   data.EndDate,
 		UserID:    data.UserID,
 	}
+
+	for _, v := range data.RentDetails {
+		coredetail := rentdetails.Core{
+			Id:     v.ID,
+			BookID: v.BookID,
+			RentID: v.RentID,
+		}
+		result.Rentdetail = append(result.Rentdetail, coredetail)
+
+	}
+
+	return result
 }
 
 func ListModelToCore(dataModel []Rent) []rents.Core {
