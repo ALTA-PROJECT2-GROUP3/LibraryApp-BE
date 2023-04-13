@@ -111,9 +111,9 @@ $ go run .
 
 # 🤖 Author
 
--  Adi Yuda Pranata  <br>  [![GitHub](https://img.shields.io/badge/Findryan-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Adiyuda123)
--  Iqbal Azwardi <br>  [![GitHub](https://img.shields.io/badge/Alif-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Iqballazuardi)
--  Wanta Zulfikri <br>  [![GitHub](https://img.shields.io/badge/Alif-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/wanta-zulfikri)
+-  Adi Yuda Pranata  <br>  [![GitHub](https://img.shields.io/badge/Yuda-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Adiyuda123)
+-  Iqbal Azwardi <br>  [![GitHub](https://img.shields.io/badge/Iqbal-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Iqballazuardi)
+-  Wanta Zulfikri <br>  [![GitHub](https://img.shields.io/badge/Wanta-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/wanta-zulfikri)
 
 
 
