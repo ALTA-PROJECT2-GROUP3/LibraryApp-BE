@@ -23,6 +23,7 @@ func (rn *rentQuery) History(userID int) ([]rents.Core, error) {
 	tmp := []Rent{}
 	tx := rn.db.Where("rents.user_id = ?", userID).Select("rents.start_date, rents.end_date, books.id AS book_id").Joins("Join books ON rents.book_id = books.id").Find(&tmp)
 	if tx.Error != nil {
+		log.Error("Terjadi error saat select")
 		return nil, tx.Error
 	}
 	return ListModelToCore(tmp), nil
@@ -49,6 +50,7 @@ func (rn *rentQuery) Insert(input rents.Core) (uint, error) {
 	data := CoreToRent(input)
 	tx := rn.db.Create(&data)
 	if tx.Error != nil {
+		log.Error("Terjadi error saat create")
 		return 0, tx.Error
 	}
 	return data.ID, nil

@@ -32,6 +32,7 @@ func (rn *RentdetailHandler) Add(c echo.Context) error {
 
 	err := rn.srv.Create(newRent)
 	if err != nil {
+		c.Logger().Error("terjadi kesalahan saat create", err.Error())
 		return c.JSON(helper.ErrorResponse(err))
 	}
 	return c.JSON(helper.SuccessResponse(http.StatusCreated, "create rent successfully"))

@@ -23,6 +23,7 @@ func (rn *rentdetailQuery) Insert(input rentdetails.Core) error {
 	data := CoreToRentdetail(input)
 	tx := rn.db.Create(&data)
 	if tx.Error != nil {
+		log.Error("Terjadi error saat create")
 		return tx.Error
 	}
 	return nil
