@@ -16,7 +16,7 @@ tags:
   - name: Auth
   - name: User
   - name: Book
-  - name: Borrowing
+  - name: Rent
   
 
 paths:
@@ -186,20 +186,6 @@ paths:
                 message: "success update user profile"
         400:
           $ref: "#/components/responses/400"
-        404:
-          $ref: "#/components/responses/404"
-        500:
-          $ref: "#/components/responses/500"
-    delete:
-      tags:
-        - "User"
-      description: deactivate user
-      summary: deactivate user
-      security:
-        - JWTAuth: []
-      responses:
-        204:
-          $ref: "#/components/responses/204"
         404:
           $ref: "#/components/responses/404"
         500:
@@ -474,15 +460,15 @@ paths:
           $ref: "#/components/responses/500"
 
   ####################################
-  #  BORROWINGS
+  #  RENT
   ####################################      
 
-  /rent:
+  /rents:
     post:
       tags:
-        - Borrowing
-      summary: "Create borrowing"
-      description: "Insert data for borrowing"
+        - Rent
+      summary: "Create rent"
+      description: "Insert data for rent"
       security:
         - JWTAuth: []
       requestBody:
@@ -492,63 +478,216 @@ paths:
             schema:
               type: object
               properties:
-                book_id:
-                  type: integer
                 start_date:
                   type: string
                 end_date:
                   type: string
             example:
-              book_id: 1
               start_date: "2023-04-13"
               end_date: "2023-04-17"
       responses:
         201:
-          description: "success book borrowing"
+          description: "success create rent"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/responseObject"
               example:
                 data:
-                  book_id: 1
                   start_date: "2023-04-13"
                   end_date: "2023-04-17"
-                message: "success book borrowing"
+                message: "success create rent"
         400:
           $ref: "#/components/responses/400"
         500:
           $ref: "#/components/responses/500"
+  /rents/{rent_id}:
+    parameters:
+      - in: path
+        name: rent_id
+        required: true
+        description: The ID of the rent to read data
+        schema:
+          type: integer
     get:
       tags:
-        - Borrowing
+        - Rent
+      summary: Get a rent by ID
+      responses:
+        200:
+          description: "get rent by id"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/responseObject"
+              example:
+                data:
+                  id: 1
+                  "start_date": "23-4-2023"
+                  "end_date": "25-4-2023"
+                  "user_id": 1
+                  "rent_detail":
+                      [
+                    {
+                      "rent_id": 1,
+                      "book_id": 2,
+                      "title": "Naruto",
+                      "user_name": "iqbal",
+                      "book_picture": "https://kurabsent.s3.amazonaws.com/2022-07-06%2006%3A40%3A47.jpg",
+                    },
+                    {
+                      "rent_id": 1,
+                      "book_id": 2,
+                      "title": "Hinata",
+                      "user_name": "iqbal",
+                      "book_picture": "https://kurabsent.s3.amazonaws.com/2022-07-06%2006%3A40%3A47.jpg",
+                    },
+                  ]
+                message: "success get rent by id"
+        400:
+          $ref: "#/components/responses/400"
+        500:
+          $ref: "#/components/responses/500"
+  /history:
+     get:
+      tags:
+        - Rent
       summary: "Get all data borrowing from user"
       description: "get all your data borrowing"
       security:
         - JWTAuth: []
       responses:
         200:
-          description: "success get user borrowing"
+          description: "success get all data borrowing from user"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/responseObject"
               example:
                 data:
-                  - book_id: 1
-                    title: "Naruto"
-                    start_date: "2023-04-15"
-                    end_date: "2023-04-17"
-                  - book_id: 1
-                    title: "Sasuke"
-                    start_date: "2023-01-15"
-                    end_date: "2023-01-17"
-                message: "sucess get user borrowing"
+                  [
+                    {  
+                      "start_date": "23-4-2023",
+                      "end_date": "25-4-2023",
+                      "user_id": 1,
+                      "rent_detail":
+                       [
+                        {
+                          "rent_id": 1,
+                          "book_id": 2,
+                          "title": "Naruto",
+                          "user_name": "iqbal",
+                          "book_picture": "https://kurabsent.s3.amazonaws.com/2022-07-06%2006%3A40%3A47.jpg",
+                        },
+                        {
+                          "rent_id": 1,
+                          "book_id": 2,
+                          "title": "Hinata",
+                          "user_name": "iqbal",
+                          "book_picture": "https://kurabsent.s3.amazonaws.com/2022-07-06%2006%3A40%3A47.jpg",
+                        },
+                       ]
+                    },
+                    {  
+                      "start_date": "23-4-2023",
+                      "end_date": "25-4-2023",
+                      "user_id": 1,
+                      "rent_detail":
+                       [
+                        {
+                          "rent_id": 1,
+                          "book_id": 2,
+                          "title": "Naruto",
+                          "user_name": "iqbal",
+                          "book_picture": "https://kurabsent.s3.amazonaws.com/2022-07-06%2006%3A40%3A47.jpg",
+                        },
+                        {
+                          "rent_id": 1,
+                          "book_id": 2,
+                          "title": "Hinata",
+                          "user_name": "iqbal",
+                          "book_picture": "https://kurabsent.s3.amazonaws.com/2022-07-06%2006%3A40%3A47.jpg",
+                        },
+                       ]
+                    }
+                  
+                  ]
+                message: "sucess get all data borrowing from user"
         400:
           $ref: "#/components/responses/400"
         500:
           $ref: "#/components/responses/500"
-    
+
+  /bookrented:
+     get:
+      tags:
+        - Rent
+      summary: "Get all book rented"
+      description: "get all book rented"
+      security:
+        - JWTAuth: []
+      responses:
+        200:
+          description: "success get all data borrowing from user"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/responseObject"
+              example:
+                data:
+                  [
+                    {  
+                      "start_date": "23-4-2023",
+                      "end_date": "25-4-2023",
+                      "user_id": 1,
+                      "rent_detail":
+                       [
+                        {
+                          "rent_id": 1,
+                          "book_id": 2,
+                          "title": "Naruto",
+                          "user_name": "iqbal",
+                          "book_picture": "https://kurabsent.s3.amazonaws.com/2022-07-06%2006%3A40%3A47.jpg",
+                        },
+                        {
+                          "rent_id": 1,
+                          "book_id": 2,
+                          "title": "Hinata",
+                          "user_name": "iqbal",
+                          "book_picture": "https://kurabsent.s3.amazonaws.com/2022-07-06%2006%3A40%3A47.jpg",
+                        },
+                       ]
+                    },
+                    {  
+                      "start_date": "23-4-2023",
+                      "end_date": "25-4-2023",
+                      "user_id": 1,
+                      "rent_detail":
+                       [
+                        {
+                          "rent_id": 1,
+                          "book_id": 2,
+                          "title": "Naruto",
+                          "user_name": "iqbal",
+                          "book_picture": "https://kurabsent.s3.amazonaws.com/2022-07-06%2006%3A40%3A47.jpg",
+                        },
+                        {
+                          "rent_id": 1,
+                          "book_id": 2,
+                          "title": "Hinata",
+                          "user_name": "iqbal",
+                          "book_picture": "https://kurabsent.s3.amazonaws.com/2022-07-06%2006%3A40%3A47.jpg",
+                        },
+                       ]
+                    }
+                  
+                  ]
+                message: "sucess get all book rented"
+        400:
+          $ref: "#/components/responses/400"
+        500:
+          $ref: "#/components/responses/500"
+      
 
 ####################################
 #  COMPONENT
