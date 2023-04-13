@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"libraryapp/features/rentdetails"
 	"libraryapp/features/rents"
 	"libraryapp/helper"
 	"libraryapp/middlewares"
@@ -12,12 +13,14 @@ import (
 )
 
 type RentHandler struct {
-	srv rents.RentService
+	srv       rents.RentService
+	srvdetail rentdetails.RentdetailService
 }
 
-func New(service rents.RentService) *RentHandler {
+func New(service rents.RentService, services rentdetails.RentdetailService) *RentHandler {
 	return &RentHandler{
-		srv: service,
+		srv:       service,
+		srvdetail: services,
 	}
 }
 
@@ -32,11 +35,20 @@ func (rn *RentHandler) Add(c echo.Context) error {
 	newRent := rents.Core{}
 	copier.Copy(&newRent, &addInput)
 
-	err := rn.srv.Create(newRent)
+	rentID, err := rn.srv.Create(newRent)
 	if err != nil {
 		return c.JSON(helper.ErrorResponse(err))
 	}
-	return c.JSON(helper.SuccessResponse(http.StatusCreated, "create rent successfully"))
+
+	for _, v := range addInput.BookID {
+		detail := rentdetails.Core{
+			RentID: rentID,
+			BookID: uint(v),
+		}
+		rn.srvdetail.Create(detail)
+	}
+
+	return c.JSON(helper.SuccessResponse(http.StatusCreated, "create rent successfully", rentID))
 }
 
 func (rn *RentHandler) GetById(c echo.Context) error {

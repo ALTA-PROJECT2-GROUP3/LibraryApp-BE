@@ -34,15 +34,15 @@ func (srv *rentService) GetById(id int) (rents.Core, error) {
 }
 
 // Create implements rents.RentService
-func (srv *rentService) Create(newRent rents.Core) error {
+func (srv *rentService) Create(newRent rents.Core) (uint, error) {
 	errValidate := srv.vld.Struct(newRent)
 	if errValidate != nil {
-		return errValidate
+		return 0, errValidate
 	}
 
-	errInsert := srv.data.Insert(newRent)
+	rentID, errInsert := srv.data.Insert(newRent)
 	if errInsert != nil {
-		return errInsert
+		return 0, errInsert
 	}
-	return nil
+	return rentID, nil
 }

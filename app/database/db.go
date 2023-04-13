@@ -3,6 +3,7 @@ package database
 import (
 	"libraryapp/app/config"
 	books "libraryapp/features/books/data"
+	rentdetails "libraryapp/features/rentdetails/data"
 	rents "libraryapp/features/rents/data"
 	users "libraryapp/features/users/data"
 
@@ -36,4 +37,5 @@ func InitialMigration(db *gorm.DB) {
 	db.AutoMigrate(&users.User{})
 	db.AutoMigrate(&books.Book{})
 	db.AutoMigrate(&rents.Rent{})
+	db.AutoMigrate(&rentdetails.Rentdetail{})
 }

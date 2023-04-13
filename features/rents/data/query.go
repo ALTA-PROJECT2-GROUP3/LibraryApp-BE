@@ -45,11 +45,11 @@ func (rn *rentQuery) SelectById(id uint) (rents.Core, error) {
 }
 
 // Insert implements rents.RentData
-func (rn *rentQuery) Insert(input rents.Core) error {
+func (rn *rentQuery) Insert(input rents.Core) (uint, error) {
 	data := CoreToRent(input)
 	tx := rn.db.Create(&data)
 	if tx.Error != nil {
-		return tx.Error
+		return 0, tx.Error
 	}
-	return nil
+	return data.ID, nil
 }
