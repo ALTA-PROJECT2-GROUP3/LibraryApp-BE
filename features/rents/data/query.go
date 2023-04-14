@@ -23,8 +23,8 @@ func (rn *rentQuery) HistoryMyBookRented(userID uint) ([]rents.Core, error) {
 	tmp := []Rent{}
 	tx := rn.db.Preload("RentDetails").Preload("RentDetails.Book").
 		Select("rents.*").
-		Joins("inner join rents.id = rentdetails.rent_id").
-		Joins("inner join books.id = rentdetails.book_id").
+		Joins("inner join rentdetails on rents.id = rentdetails.rent_id").
+		Joins("inner join books on books.id = rentdetails.book_id").
 		Where("books.user_id = ?", userID).Find(&tmp)
 	if tx.RowsAffected < 1 {
 		log.Error("Terjadi error saat select rent")
