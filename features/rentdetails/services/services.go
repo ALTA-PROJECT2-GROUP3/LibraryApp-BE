@@ -20,7 +20,7 @@ func New(repo rentdetails.RentdetailData) rentdetails.RentdetailService {
 
 // Create implements rentdetails.RentdetailService
 func (srv *rentdetailsService) Create(newRent rentdetails.Core) error {
-	errValidate := srv.vld.Struct(newRent)
+	errValidate := srv.vld.StructExcept(newRent, "Book")
 	if errValidate != nil {
 		return errValidate
 	}
