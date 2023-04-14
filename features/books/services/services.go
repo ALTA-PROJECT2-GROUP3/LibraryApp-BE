@@ -49,7 +49,7 @@ func (srv *bookService) Update(userid int, id int, updateBook books.Core, fileHe
 
 // GetAll implements books.BookService
 func (srv *bookService) GetAll(page int, name string) ([]books.Core, error) {
-	limit := 10
+	limit := 5
 	offset := (page - 1) * limit
 	data, err := srv.data.SelectAll(limit, offset, name)
 	return data, err
